@@ -1,9 +1,12 @@
 import os
 
-import psycopg2
+from flask_cors import CORS
 from flask import Flask, jsonify, request
+import psycopg2
 
 app = Flask(__name__)
+
+CORS(app)
 
 
 def get_db_conn():
@@ -16,7 +19,10 @@ def get_data():
   conn = get_db_conn()
   try:
     cur = conn.cursor()
-    query = "SELECT * FROM cameo_countries WHERE label like %s"
+    if param_value:
+      query = "SELECT * FROM cameo_countries WHERE label like %s"
+    else:
+      query = "SELECT * FROM cameo_countries"
     country_query = f"%{param_value}%"
     cur.execute(query, (country_query, ))
     data = cur.fetchall()
