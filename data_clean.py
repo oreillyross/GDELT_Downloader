@@ -3,7 +3,7 @@ from collections import Counter
 
 from utils import get_deduped_sources, get_sources
 
-file_path = "gdelt_data/20241210091500.export.CSV"
+file_path = "gdelt_data/20241210144500.export.CSV"
 
 def urlSources(file_path):
   sources = get_sources(file_path)

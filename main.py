@@ -96,7 +96,7 @@ def start_fetching_thread():
 def index():
     return "GDELT Data Fetcher is running. Check the logs for data download status."
 
-file_path = "gdelt_data/20241209144500.export.CSV"
+file_path = "gdelt_data/20241223120000.export.CSV"
 
 @app.route("/api/urls", methods=["GET"])
 def getUrls():
