@@ -9,10 +9,13 @@ import requests
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 
+from api.keywords import keywords_bp
 from data_clean import urlSources
 
 # Create Flask app
 app = Flask(__name__)
+
+app.register_blueprint(keywords_bp)
 
 CORS(app)
 
@@ -96,11 +99,14 @@ def start_fetching_thread():
 def index():
     return "GDELT Data Fetcher is running. Check the logs for data download status."
 
-file_path = "gdelt_data/20241223120000.export.CSV"
+
+file_path = "gdelt_data/20250102144500.export.CSV"
+
 
 @app.route("/api/urls", methods=["GET"])
 def getUrls():
     return urlSources(file_path=file_path)
+
 
 @app.route("/api/goldstein_scales", methods=['GET'])
 def get_goldstein_scales():
