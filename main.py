@@ -100,7 +100,7 @@ def index():
     return "GDELT Data Fetcher is running. Check the logs for data download status."
 
 
-file_path = "gdelt_data/20250106154500.export.CSV"
+file_path = "gdelt_data/20250113104500.export.CSV"
 
 
 @app.route("/api/urls", methods=["GET"])
