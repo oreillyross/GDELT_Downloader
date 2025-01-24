@@ -21,7 +21,7 @@ if __name__ == "__main__":
   filteredSources = {url : count for url, count in cSources.items() if count > 2}
   sortedSources = sorted(filteredSources.items(), key=lambda item: item[1], reverse=True)
   # pprint.pprint(sortedSources)
-  obj = get_web_page_summary(sortedSources[0])
+  obj = get_web_page_summary(sortedSources[7][0])
   print(obj)
   
   
