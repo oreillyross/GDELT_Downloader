@@ -11,7 +11,7 @@ def urlSources(file_path):
   cSources = Counter(sources)
   filteredSources = {url : count for url, count in cSources.items() if count > 2}
   sortedSources = sorted(filteredSources.items(), key=lambda item: item[1], reverse=True)
-  return sortedSources
+  return [{"url": url, "count": count} for url, count in sortedSources]
 
 
 if __name__ == "__main__":

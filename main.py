@@ -6,7 +6,7 @@ from threading import Thread
 
 import psycopg2
 import requests
-from flask import Flask, jsonify, request
+from flask import Flask, json, jsonify, request
 from flask_cors import CORS
 
 from api.keywords import keywords_bp
@@ -18,6 +18,9 @@ app = Flask(__name__)
 app.register_blueprint(keywords_bp)
 
 CORS(app)
+
+is_collecting = False
+collection_thread = None
 
 
 def get_db_conn():
@@ -46,7 +49,8 @@ API_URL_TEMPLATE = "http://data.gdeltproject.org/gdeltv2/{date}.export.CSV.zip"
 
 
 def fetch_and_save_file():
-    while True:
+    global is_collecting
+    while is_collecting:
         # Get the current date in the format GDELT expects
 
         date_str = last_15_minute_mark()
@@ -94,13 +98,40 @@ def start_fetching_thread():
     thread.start()
 
 
+@app.route("/api/start_collecting", methods=["POST"])
+def start_collection():
+    global is_collecting, collection_thread
+    if not is_collecting:
+        is_collecting = True
+        thread = Thread(target=fetch_and_save_file)
+        thread.daemon = True
+        thread.start()
+        return jsonify({"message": "Data Collection started"}), 200
+    return jsonify({"message": "Data collection ongoing"})
+
+
+@app.route("/api/stop_collecting", methods=["POST"])
+def stop_collecting():
+    global is_collecting, collection_thread
+    if is_collecting:
+        is_collecting = False
+        return jsonify({"message": "Data collection stopped"}), 200
+    return jsonify({"message": "Data collection not running."}), 200
+
+
+@app.route("/api/collection_status", methods=["GET"])
+def collection_status():
+    global is_collecting
+    return jsonify({"Collection Status": is_collecting}), 200
+
+
 # Route to check the server is running
 @app.route('/')
 def index():
     return "GDELT Data Fetcher is running. Check the logs for data download status."
 
 
-file_path = "gdelt_data/20250124130000.export.CSV"
+file_path = "gdelt_data/20250129150000.export.CSV"
 
 
 @app.route("/api/urls", methods=["GET"])
@@ -157,7 +188,7 @@ def get_data():
 
 if __name__ == '__main__':
     # Start the background thread
-    start_fetching_thread()
+    #start_fetching_thread()
 
     # Start Flask server
     app.run(host="0.0.0.0", port=5000, debug=True)
