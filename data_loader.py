@@ -25,5 +25,9 @@ if __name__ == "__main__":
     print(f"Loaded {len(df)} rows")
     print("\nFirst few rows:")
     print(df.head(0))
-    print(df[['Actor1Name', 'Actor2Name', 'EventCode', 'EventBaseCode']].head())
-    print(events[df['EventCode']].head())
+    event_rows = df[['Actor1Name', 'Actor2Name', 'EventCode', 'EventBaseCode']].head()
+    print(event_rows)
+    print("\nEvent Descriptions:")
+    for _, row in event_rows.iterrows():
+        if row['EventCode'] in events:
+            print(f"EventCode {row['EventCode']}: {events[row['EventCode']]}")
