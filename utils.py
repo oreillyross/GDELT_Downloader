@@ -21,7 +21,6 @@ def get_deduped_sources(file_path):
   sources = get_sources(file_path)
   return set(sources)
 
-
 def get_latest_file(directory):
   files = [
       f for f in os.listdir(directory)

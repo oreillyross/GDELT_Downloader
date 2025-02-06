@@ -19,7 +19,7 @@ app.register_blueprint(keywords_bp)
 
 CORS(app)
 
-is_collecting = False
+is_collecting = True
 collection_thread = None
 
 
