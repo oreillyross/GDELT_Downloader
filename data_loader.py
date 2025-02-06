@@ -2,7 +2,8 @@
 import pandas as pd
 
 from constants import gdelt_columns
-from utils import get_latest_file
+from utils.sources import get_latest_file
+from utils.event_codes import load_event_codes
 
 
 def load_latest_gdelt_data(dedupe_urls=True):
@@ -20,7 +21,9 @@ def load_latest_gdelt_data(dedupe_urls=True):
 
 if __name__ == "__main__":
     df = load_latest_gdelt_data()
+    events = load_event_codes()
     print(f"Loaded {len(df)} rows")
     print("\nFirst few rows:")
     print(df.head(0))
     print(df[['Actor1Name', 'Actor2Name', 'EventCode', 'EventBaseCode']].head())
+    print(events[df['EventCode']].head())
