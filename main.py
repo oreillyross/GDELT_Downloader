@@ -77,7 +77,8 @@ def fetch_and_save_file():
                     )
                     for filename in zip_ref.namelist():
                         print(f"extracted: {filename}")
-
+                        
+                
                 os.remove(zip_filename)
                 print(f"{zip_filename} has been deleted successfuly")
             else:
@@ -131,7 +132,7 @@ def index():
     return "GDELT Data Fetcher is running. Check the logs for data download status."
 
 
-file_path = "gdelt_data/20250129150000.export.CSV"
+file_path = "gdelt_data/20250205084500.export.CSV"
 
 
 @app.route("/api/urls", methods=["GET"])
