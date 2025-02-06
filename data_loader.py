@@ -29,6 +29,6 @@ if __name__ == "__main__":
     print(event_rows)
     print("\nEvent Descriptions:")
     for _, row in event_rows.iterrows():
-       
-        if row['EventCode'] in events:
-            print(f"EventCode {row['EventCode']}: {events[row['EventCode']]}")
+        event_code = str(row['EventCode']).zfill(3)       
+        if event_code in events:
+            print(f"EventCode {row['EventCode']}: {events[event_code]}")
