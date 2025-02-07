@@ -25,7 +25,7 @@ if __name__ == "__main__":
     print(f"Loaded {len(df)} rows")
     print("\nFirst few rows:")
     print(df.head(0))
-    event_rows = df[['Actor1Name', 'Actor2Name', 'EventCode', 'EventBaseCode']].head()
+    event_rows = df[['Actor1Name', 'Actor2Name', 'EventCode', 'EventBaseCode', 'SOURCEURL']].head(20)
     print(event_rows)
     print("\nEvent Descriptions:")
     for _, row in event_rows.iterrows():
