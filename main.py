@@ -137,7 +137,7 @@ file_path = "gdelt_data/20250205084500.export.CSV"
 
 @app.route("/api/events", methods=["GET"])
 def getEvents():
-    event_data = get_event_data(limit=100)
+    event_data = get_event_data(limit=1)
     return event_data
 
 
