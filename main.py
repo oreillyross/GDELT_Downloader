@@ -10,7 +10,7 @@ from flask import Flask, json, jsonify, request
 from flask_cors import CORS
 
 from api.keywords import keywords_bp
-from data_clean import urlSources
+from data_loader import get_event_data
 
 # Create Flask app
 app = Flask(__name__)
@@ -19,7 +19,7 @@ app.register_blueprint(keywords_bp)
 
 CORS(app)
 
-is_collecting = True
+is_collecting = False
 collection_thread = None
 
 
@@ -135,9 +135,10 @@ def index():
 file_path = "gdelt_data/20250205084500.export.CSV"
 
 
-@app.route("/api/urls", methods=["GET"])
-def getUrls():
-    return urlSources(file_path=file_path)
+@app.route("/api/events", methods=["GET"])
+def getEvents():
+    event_data = get_event_data(limit=100)
+    return event_data
 
 
 @app.route("/api/goldstein_scales", methods=['GET'])
