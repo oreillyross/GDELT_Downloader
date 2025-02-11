@@ -27,7 +27,7 @@ def get_event_data(limit=20):
     result = []
     for _, row in event_rows.iterrows():
         event_code = str(row['EventCode']).zfill(3)
-        event_data = row.to_dict()
+        event_data = {k: (None if pd.isna(v) else v) for k,v in row.items()}
         event_data['EventDescription'] = events.get(event_code, "Unknown Code")
         result.append(event_data)
     return result

@@ -19,7 +19,7 @@ app.register_blueprint(keywords_bp)
 
 CORS(app)
 
-is_collecting = False
+is_collecting = True
 collection_thread = None
 
 
@@ -91,6 +91,9 @@ def fetch_and_save_file():
         # Sleep for 15 minutes before fetching again
         time.sleep(15 * 60)  # 15 minutes
 
+def load_data_to_DB():
+     eventdata = get_event_data()
+     print("load_data_to_DB() called")
 
 # Run the data fetching in a background thread
 def start_fetching_thread():
@@ -98,6 +101,11 @@ def start_fetching_thread():
     thread.daemon = True
     thread.start()
 
+def start_loading_to_db_thread():
+    thread = Thread(target=load_data_to_DB)
+    thread.daemon = True
+    thread.start()
+    
 
 @app.route("/api/start_collecting", methods=["POST"])
 def start_collection():
@@ -137,7 +145,7 @@ file_path = "gdelt_data/20250205084500.export.CSV"
 
 @app.route("/api/events", methods=["GET"])
 def getEvents():
-    event_data = get_event_data(limit=1)
+    event_data = get_event_data(limit=100)
     return event_data
 
 
