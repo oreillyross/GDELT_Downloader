@@ -10,7 +10,7 @@ from flask import Flask, json, jsonify, request
 from flask_cors import CORS
 
 from api.keywords import keywords_bp
-from data_loader import get_event_data
+from data_loader import get_event_data, load_event_data_DB
 
 # Create Flask app
 app = Flask(__name__)
@@ -81,6 +81,7 @@ def fetch_and_save_file():
                 
                 os.remove(zip_filename)
                 print(f"{zip_filename} has been deleted successfuly")
+                load_event_data_DB()
             else:
                 print(f"Failed to download data from {url}"
                       f"(status code: {response.status_code})")
@@ -91,9 +92,6 @@ def fetch_and_save_file():
         # Sleep for 15 minutes before fetching again
         time.sleep(15 * 60)  # 15 minutes
 
-def load_data_to_DB():
-     eventdata = get_event_data()
-     print("load_data_to_DB() called")
 
 # Run the data fetching in a background thread
 def start_fetching_thread():
@@ -101,11 +99,6 @@ def start_fetching_thread():
     thread.daemon = True
     thread.start()
 
-def start_loading_to_db_thread():
-    thread = Thread(target=load_data_to_DB)
-    thread.daemon = True
-    thread.start()
-    
 
 @app.route("/api/start_collecting", methods=["POST"])
 def start_collection():

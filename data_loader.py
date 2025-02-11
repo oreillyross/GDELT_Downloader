@@ -2,6 +2,7 @@
 import pandas as pd
 
 from constants import gdelt_columns
+from main import get_db_conn
 from utils.sources import get_latest_file
 from utils.event_codes import load_event_codes
 
@@ -31,7 +32,31 @@ def get_event_data(limit=20):
         event_data['EventDescription'] = events.get(event_code, "Unknown Code")
         result.append(event_data)
     return result
-        
+
+def load_event_data_DB():
+    conn = get_db_conn()
+    cur = conn.cursor()
+    try:
+        events = get_event_data()
+        for event in events:
+            cur.execute("""
+                INSERT INTO Events (SQLDATE, Title, EventDescription, Location, Url)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (SQLDATE, Url) DO NOTHING
+            """, (
+                event.get('SQLDATE'),
+                event.get('Actor1Name', ''),
+                event.get('EventDescription', ''),
+                event.get('Actor1Geo_FullName', ''),
+                event.get('SOURCEURL', '')
+            ))
+        conn.commit()
+        print("Succesfully loaded events into database")
+    finally:
+        if cur:
+            cur.close()
+        if conn:
+            conn.close()
 
 if __name__ == "__main__":
     print("Events as a list")
