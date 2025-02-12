@@ -4,13 +4,13 @@ import zipfile
 from datetime import datetime, timedelta
 from threading import Thread
 
-import psycopg2
 import requests
 from flask import Flask, json, jsonify, request
 from flask_cors import CORS
 
 from api.keywords import keywords_bp
 from data_loader import get_event_data, load_event_data_DB
+from utils.db import get_db_conn
 
 # Create Flask app
 app = Flask(__name__)
@@ -23,8 +23,7 @@ is_collecting = True
 collection_thread = None
 
 
-def get_db_conn():
-    return psycopg2.connect(os.environ['DATABASE_URL'])
+
 
 
 # Directory where the files will be saved
@@ -49,6 +48,7 @@ API_URL_TEMPLATE = "http://data.gdeltproject.org/gdeltv2/{date}.export.CSV.zip"
 
 
 def fetch_and_save_file():
+    print("Inside fetch_and_save_file")
     global is_collecting
     while is_collecting:
         # Get the current date in the format GDELT expects
@@ -191,7 +191,7 @@ def get_data():
 
 if __name__ == '__main__':
     # Start the background thread
-    #start_fetching_thread()
+    start_fetching_thread()
 
     # Start Flask server
     app.run(host="0.0.0.0", port=5000, debug=True)

@@ -2,7 +2,7 @@
 import pandas as pd
 
 from constants import gdelt_columns
-from main import get_db_conn
+from utils.db import get_db_conn
 from utils.sources import get_latest_file
 from utils.event_codes import load_event_codes
 
