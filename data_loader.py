@@ -39,12 +39,14 @@ def load_event_data_DB():
     try:
         events = get_event_data()
         for event in events:
+            sqldate = str(event.get('SQLDATE'))
+            formattedDate = f"{sqldate[:4]}-{sqldate[4:6]}-{sqldate[6:8]}"
             cur.execute("""
                 INSERT INTO Events (SQLDATE, Title, EventDescription, Location, Url)
                 VALUES (%s, %s, %s, %s, %s)
                 ON CONFLICT (SQLDATE, Url) DO NOTHING
             """, (
-                event.get('SQLDATE'),
+                formattedDate,
                 event.get('Actor1Name', ''),
                 event.get('EventDescription', ''),
                 event.get('Actor1Geo_FullName', ''),
