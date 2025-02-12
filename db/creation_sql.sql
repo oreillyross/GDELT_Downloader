@@ -107,12 +107,12 @@ CREATE TABLE cameo_goldstein_scale (
 -- Alternatively, for a psql script, you might use:
 COPY cameo_goldstein_scale FROM '/path/to/CAMEO.goldsteinscale.txt' WITH DELIMITER E'\t' CSV HEADER;
 ------------------------------------------------------------------------------------------------------
-DROP TABLE IF EXISTS Events
+DROP TABLE IF EXISTS Events;
     
 CREATE TABLE Events (
     SQLDATE DATE,
     Title VARCHAR(255),
     EventDescription TEXT,
     Location VARCHAR(255),
-    Url VARCHAR(255)
+    Url VARCHAR(255), CONSTRAINT events_unique_dates_url UNIQUE (SQLDATE, Url)
 );
