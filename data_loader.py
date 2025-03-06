@@ -3,8 +3,8 @@ import pandas as pd
 
 from constants import gdelt_columns
 from utils.db import get_db_conn
-from utils.sources import get_latest_file
 from utils.event_codes import load_event_codes
+from utils.sources import get_latest_file, get_title
 
 
 def load_latest_gdelt_data(dedupe_urls=True):
@@ -20,7 +20,8 @@ def load_latest_gdelt_data(dedupe_urls=True):
         df = df.drop_duplicates(subset=['SOURCEURL'])
     return df
 
-def get_event_data(limit=20):
+#TODO Provide a way to change this limit fromt the front end, through an API call.
+def get_event_data(limit=100):
     df = load_latest_gdelt_data()
     events = load_event_codes()
 
@@ -38,20 +39,24 @@ def load_event_data_DB():
     cur = conn.cursor()
     try:
         events = get_event_data()
+        print(f"received {len(events)} events, processing...")
         for event in events:
+            print({event})
             sqldate = str(event.get('SQLDATE'))
             formattedDate = f"{sqldate[:4]}-{sqldate[4:6]}-{sqldate[6:8]}"
+            title = get_title(event.get('SOURCEURL'))
             cur.execute("""
                 INSERT INTO Events (SQLDATE, Title, EventDescription, Location, Url)
                 VALUES (%s, %s, %s, %s, %s)
                 ON CONFLICT (SQLDATE, Url) DO NOTHING
             """, (
                 formattedDate,
-                event.get('Actor1Name', ''),
+                title,
                 event.get('EventDescription', ''),
                 event.get('Actor1Geo_FullName', ''),
                 event.get('SOURCEURL', '')
             ))
+            print(f"inserted record: {title}")
         conn.commit()
         print("Succesfully loaded events into database")
     finally:

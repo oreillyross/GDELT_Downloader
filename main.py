@@ -4,8 +4,9 @@ import zipfile
 from datetime import datetime, timedelta
 from threading import Thread
 
+
 import requests
-from flask import Flask, json, jsonify, request
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 from api.keywords import keywords_bp
@@ -21,10 +22,6 @@ CORS(app)
 
 is_collecting = True
 collection_thread = None
-
-
-
-
 
 # Directory where the files will be saved
 SAVE_DIRECTORY = "gdelt_data"
@@ -48,7 +45,7 @@ API_URL_TEMPLATE = "http://data.gdeltproject.org/gdeltv2/{date}.export.CSV.zip"
 
 
 def fetch_and_save_file():
-    print("Inside fetch_and_save_file")
+
     global is_collecting
     while is_collecting:
         # Get the current date in the format GDELT expects
@@ -77,8 +74,7 @@ def fetch_and_save_file():
                     )
                     for filename in zip_ref.namelist():
                         print(f"extracted: {filename}")
-                        
-                
+
                 os.remove(zip_filename)
                 print(f"{zip_filename} has been deleted successfuly")
                 load_event_data_DB()
@@ -138,8 +134,26 @@ file_path = "gdelt_data/20250205084500.export.CSV"
 
 @app.route("/api/events", methods=["GET"])
 def getEvents():
-    event_data = get_event_data(limit=100)
-    return event_data
+    query = "SELECT * from events"
+    conn = get_db_conn()
+    try:
+        cur = conn.cursor()
+        cur.execute(query)
+        data = cur.fetchall()
+        cur.close()
+        result = []
+        for row in data:
+            event = {
+                "date": row[0],
+                "title": row[1],
+                "event_description": row[2],
+                "location": row[3],
+                "url": row[4],
+            }
+            result.append(event)
+        return jsonify(result)
+    finally:
+        conn.close()
 
 
 @app.route("/api/goldstein_scales", methods=['GET'])

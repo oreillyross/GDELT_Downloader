@@ -1,8 +1,21 @@
 import csv
 import os
 
+import requests
+from bs4 import BeautifulSoup
+
 from constants import gdelt_columns
 
+
+def get_title(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        soup = BeautifulSoup(response.text, 'html.parser')
+        title = soup.title.string if soup.title else "Unknown"
+        return str(title).strip()
+    except (requests.RequestException, AttributeError):
+        return "Unknown, http err"
 
 def get_sources(file_path):
 

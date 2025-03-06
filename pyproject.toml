@@ -14,6 +14,7 @@ numpy = "2.1.2"
 mysql-connector-python = "9.1.0"
 psycopg2-binary = "2.9.10"
 flask-cors = "^5.0.0"
+flask-sqlalchemy = "3.1.1"
 
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
