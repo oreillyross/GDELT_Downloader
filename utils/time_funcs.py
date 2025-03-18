@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+
 def last_15_minute_mark():
   now = datetime.now()
   # Calculate the minutes to subtract to get to the last 15-minute mark

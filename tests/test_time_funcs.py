@@ -1,6 +1,3 @@
-
-from datetime import datetime
-
 from freezegun import freeze_time
 
 from utils.time_funcs import last_15_minute_mark
