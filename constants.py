@@ -1,3 +1,6 @@
+# GDELT API URL Template (For daily events)
+API_URL_TEMPLATE = "http://data.gdeltproject.org/gdeltv2/{date}.export.CSV.zip"
+
 gdelt_columns = [
     "GLOBALEVENTID", "SQLDATE", "MonthYear", "Year", "FractionDate",
     "Actor1Code", "Actor1Name", "Actor1CountryCode",
