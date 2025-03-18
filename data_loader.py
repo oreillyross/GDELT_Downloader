@@ -104,12 +104,12 @@ def fetch_and_save_file():
                 for filename in zip_ref.namelist():
                     print(f"extracted: {filename}")
 
-            os.remove(zip_filename)
-            print(f"{zip_filename} has been deleted successfuly")
-            load_event_data_DB()
-        else:
-            print(f"Failed to download data from {url}"
-                  f"(status code: {response.status_code})")
+                os.remove(zip_filename)
+                print(f"{zip_filename} has been deleted successfuly")
+                load_event_data_DB()
+            else:
+                print(f"Failed to download data from {url}"
+                      f"(status code: {response.status_code})")
 
         except Exception as e:
             print(f"Error fetching data: {e}")
