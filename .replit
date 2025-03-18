@@ -22,6 +22,7 @@ externalPort = 80
 defaultBucketID = "replit-objstore-6067ed71-99e5-47c1-9661-f42d6dd0d482"
 
 [workflows]
+runButton = "Run Tests"
 
 [[workflows.workflow]]
 name = "Run Tests"
